@@ -54,7 +54,7 @@ class MonteCarlo(object):
                     )
             else:
                 # Otherwise, just make an arbitrary decision.
-                move, state = choice(moves_states)
+                move, state = choice(move_states)
 
             # play = choice(legal)
             # state = self.board.next_state(state, play)
@@ -84,7 +84,7 @@ class MonteCarlo(object):
                 self.wins[(player, states)] += 1
 
     def get_play(self):
-        
+
         self.max_depth = 0
         state = self.states[-1]
         player = self.board.current_player(state)

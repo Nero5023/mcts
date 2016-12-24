@@ -1,32 +1,3 @@
-class Board(object):
-
-    def srart():
-        # Returns a representation of the starting state of the game.
-          pass  
-
-    def current_player(self, state):
-        # Takes the game state and returns the current player's number
-        pass
-
-    def next_state(self, state, play):
-        # Takes the game state, and the move to be applied.
-        # Return the new game state
-        pass
-
-    def legal_plays(self, state_history):
-        # Takes a sequence of game states representing the full
-        # game history, and returns the full list of moves that
-        # are legal plays for the current player.
-        pass
-
-    def winner(self, state_history):
-        # Takes a sequences of game state representing thr full
-        # game history. If the game is now won, return the player 
-        # number. If the game is still ongoing, return zero. If 
-        # the game is tied, return a different distinct value, e.g. -1.
-        pass
-
-
 import Board
 
 class WuziBoard(Board.Board):
@@ -51,3 +22,61 @@ class WuziBoard(Board.Board):
             return 1
         else:
             return 2
+
+    def next_state(self, state, play):
+        player = self.current_player(state)
+        x, y = play
+        state[x][y] = player
+        return state
+
+    def legal_plays(self, state_history):
+        newestState = state_history[-1]
+        length = len(newestState)
+        legal = []
+        for x in xrange(0, length):
+            for y in xrange(0, length):
+                if newestState[x][y] == 0:
+                    legal.append((x,y))
+        return legal
+
+    def checkIsWin(self, state, position):
+        x, y = position
+        currentValue = state[x][y]
+        isFive = True
+        for xi in xrange(x, x+5):
+            if currentValue != state[xi][y]:
+                isFive = False
+                break
+        if isFive:
+            return True
+
+        isFive = True
+        for yi in xrange(y, y+5):
+            if currentValue != state[x][yi]:
+                isFive = False
+                break
+        if isFive:
+            return True
+
+        isFive = True
+        for i in xrange(0, 5):
+            xi = x+i
+            yi = y+i
+            if currentValue != state[xi][yi]:
+                isFive = False
+                break
+        if isFive:
+            return True
+
+        return False
+
+    def winner(self, state_history):
+        newestState = state_history[-1]
+        length = len(newestState)
+        maxCheckNum = length - 5 + 1
+        player = current_player(newestState)
+        for x in xrange(0, maxCheckNum + 1):
+            for y in xrange(0, maxCheckNum + 1):
+                if checkIsWin(newestState, (x, y)):
+                    return player
+        return 0
