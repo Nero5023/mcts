@@ -8,7 +8,7 @@ if __name__ == '__main__':
     move = ai1.get_play()
     ai1.update(move)
     board2 = WuziBoard(move)
-    ai2 = MonteCarlo(board2)
+    ai2 = MonteCarlo(board2, time=20, max_moves=70)
     player = 0
     iteration = 1
     print iteration
@@ -30,4 +30,5 @@ if __name__ == '__main__':
         winner = ai1.winner()
         if winner:
             print "Winn, Winner:", winner
+            print ai1.states
             break

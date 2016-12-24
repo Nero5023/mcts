@@ -53,7 +53,7 @@ class MonteCarlo(object):
             # print "----------"
             # This layer is all selected done
             if all(plays.get((player, S)) for p, S in move_states) and list(plays.get((player, S)) for p, S in move_states) != []:
-                print sum(plays[(player, S)] for p, S in move_states) 
+                # print sum(plays[(player, S)] for p, S in move_states)
                 log_total = log(sum(plays[(player, S)] for p, S in move_states))
                 value, move, state = max(
                         ((wins[player, S]/plays[player, S]) +
