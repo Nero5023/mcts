@@ -65,9 +65,6 @@ class WuziBoard(Board.Board):
         if currentValue == 0:
             return 0
         for xi in xrange(x, x+5):
-            print xi
-            print y
-            print state
             if currentValue != state[xi][y]:
                 isFive = False
                 break
@@ -76,9 +73,6 @@ class WuziBoard(Board.Board):
 
         isFive = True
         for yi in xrange(y, y+5):
-            print x
-            print yi
-            print state
             if currentValue != state[x][yi]:
                 isFive = False
                 break
@@ -89,10 +83,6 @@ class WuziBoard(Board.Board):
         for i in xrange(0, 5):
             xi = x+i
             yi = y+i
-            print xi
-            print yi
-            print i
-            print state
             if currentValue != state[xi][yi]:
                 isFive = False
                 break

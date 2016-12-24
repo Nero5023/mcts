@@ -4,11 +4,11 @@ from MonteCarlo import *
 if __name__ == '__main__':
     # (-1,-1) means not move
     board1 = WuziBoard((-1,-1)) 
-    ai1 = MonteCarlo(board1, time = 5, max_moves = 20)
+    ai1 = MonteCarlo(board1)
     move = ai1.get_play()
     ai1.update(move)
     board2 = WuziBoard(move)
-    ai2 = MonteCarlo(board2, time = 5, max_moves = 20)
+    ai2 = MonteCarlo(board2)
     player = 0
     iteration = 1
     print iteration
