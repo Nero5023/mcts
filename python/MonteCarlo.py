@@ -1,6 +1,7 @@
+from __future__ import division
 import datetime
 from random import choice
-from __futrue__ import division
+from math import sqrt, log
 
 class MonteCarlo(object):
     """docstring for MonteCarlo"""
@@ -12,7 +13,8 @@ class MonteCarlo(object):
         # statistics tables.
         
         self.board = board
-        self.states = []
+        # self.states = []
+        self.states = [board.start()]
         seconds = kwargs.get('time', 30)
         self.calculation_time = datetime.timedelta(seconds=seconds)
         self.max_moves = kwargs.get('max_moves', 100)
@@ -23,9 +25,12 @@ class MonteCarlo(object):
         self.C = kwargs.get('C', 1.4)
 
 
-    def update(self, state):
+    def update(self, move):
         # Causes the AI to calculate the best move from the
         # current game state and return it.
+        lastState = self.states[-1]
+        state = self.board.next_state(lastState, move)
+        print state
         self.states.append(state)
 
     def run_simulation(self):
@@ -45,6 +50,8 @@ class MonteCarlo(object):
             legal = self.board.legal_plays(states_copy)
             
             move_states = [(p, self.board.next_state(state, p)) for p in legal]
+            # print move_states
+            # print "----------"
             if all(plays.get((player, S)) for p, S in move_states):
                 log_total = log(sum(plays[(player, S)] for p, S in move_states))
                 value, move, state = max(
@@ -81,7 +88,10 @@ class MonteCarlo(object):
                 continue
             self.plays[(player, state)] += 1
             if player == winner:
-                self.wins[(player, states)] += 1
+                self.wins[(player, state)] += 1
+
+    def winner(self):
+        return self.board.winner(self.states)
 
     def get_play(self):
 
@@ -92,7 +102,7 @@ class MonteCarlo(object):
 
         # Bail out early if there is no real choice to be made.
         if not legal:
-            return
+            return None
         if len(legal) == 1:
             return legal[0]
 
@@ -113,7 +123,7 @@ class MonteCarlo(object):
             (self.wins.get((player, S), 0) /
              self.plays.get((player, S), 1),
              p)
-            for p, S in moves_states
+            for p, S in move_states
         )
 
          # Display the stats for each possible play.
@@ -122,7 +132,7 @@ class MonteCarlo(object):
               self.plays.get((player, S), 1),
               self.wins.get((player, S), 0),
               self.plays.get((player, S), 0), p)
-             for p, S in moves_states),
+             for p, S in move_states),
             reverse=True
         ):
             print "{3}: {0:.2f}% ({1} / {2})".format(*x)
