@@ -30,7 +30,6 @@ class MonteCarlo(object):
         # current game state and return it.
         lastState = self.states[-1]
         state = self.board.next_state(lastState, move)
-        print state
         self.states.append(state)
 
     def run_simulation(self):
@@ -46,13 +45,15 @@ class MonteCarlo(object):
 
         expend = True
 
-        for t in xrange(self.max_moves):
+        for t in xrange(1, self.max_moves + 1):
             legal = self.board.legal_plays(states_copy)
             
             move_states = [(p, self.board.next_state(state, p)) for p in legal]
-            # print move_states
+            # print self.plays
             # print "----------"
-            if all(plays.get((player, S)) for p, S in move_states):
+            # This layer is all selected done
+            if all(plays.get((player, S)) for p, S in move_states) and list(plays.get((player, S)) for p, S in move_states) != []:
+                print sum(plays[(player, S)] for p, S in move_states) 
                 log_total = log(sum(plays[(player, S)] for p, S in move_states))
                 value, move, state = max(
                         ((wins[player, S]/plays[player, S]) +
@@ -61,6 +62,7 @@ class MonteCarlo(object):
                     )
             else:
                 # Otherwise, just make an arbitrary decision.
+                # print move_states
                 move, state = choice(move_states)
 
             # play = choice(legal)
@@ -80,7 +82,7 @@ class MonteCarlo(object):
             player = self.board.current_player(state)
             winner = self.board.winner(states_copy)
             
-            if winner:
+            if winner or winner == -1:
                 break
 
         for player, state in visited_states:

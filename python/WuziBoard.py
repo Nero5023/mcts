@@ -104,4 +104,13 @@ class WuziBoard(Board.Board):
             for y in xrange(0, maxCheckNum):
                 if self.checkIsWin(newestState, (x, y)):
                     return player
+        if filter((lambda listIter: filter((lambda x: x==0), listIter) != ()), newestState) == ():
+            return -1
         return 0
+
+    def isInitialState(self, state_history):
+        state = state_history[-1]
+        if state == [([0] * 9) for i in range(9)]:
+            return True
+        else:
+            return False
